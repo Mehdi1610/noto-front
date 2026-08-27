@@ -1,0 +1,76 @@
+<app-header />
+
+<main class="max-w-3xl mx-auto px-4 sm:px-6 py-6">
+    <a routerLink="/dossiers" class="text-sm text-blue-600 hover:underline flex items-center gap-1 mb-4">
+        ← Retour aux dossiers
+    </a>
+
+    @if (chargement()) {
+        <p class="text-gray-400 text-sm">Chargement...</p>
+    } @else if (erreur() && !dossier()) {
+        <p class="text-red-600 text-sm">{{ erreur() }}</p>
+    } @else if (dossier(); as d) {
+        <div class="flex items-center justify-between mb-2">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">{{ d.nom }}</h1>
+        </div>
+
+        @if (d.description) {
+            <p class="text-sm text-gray-500 mb-4">{{ d.description }}</p>
+        }
+
+        @if (d.sousDossiers.length > 0) {
+            <div class="mb-6">
+                <p class="text-xs font-medium text-gray-400 uppercase mb-2">Sous-dossiers</p>
+                <div class="flex flex-wrap gap-2">
+                    @for (sd of d.sousDossiers; track sd.id) {
+                        <button
+                            (click)="ouvrirSousDossier(sd.id)"
+                            class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-md text-sm text-gray-700"
+                        >
+                            📁 {{ sd.nom }}
+                        </button>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="flex items-center justify-between mb-3">
+            <p class="text-xs font-medium text-gray-400 uppercase">Tâches</p>
+            @if (!formulaireOuvert()) {
+                <button
+                    (click)="formulaireOuvert.set(true)"
+                    class="text-sm text-blue-600 hover:underline font-medium"
+                >
+                    + Ajouter une tâche
+                </button>
+            }
+        </div>
+
+        @if (formulaireOuvert()) {
+            <div class="mb-4">
+                <app-tache-form
+                    (creer)="creerTache($event)"
+                    (annuler)="formulaireOuvert.set(false)"
+                />
+            </div>
+        }
+
+        @if (erreur()) {
+            <p class="text-red-600 text-sm mb-3">{{ erreur() }}</p>
+        }
+
+        <div class="bg-white border border-gray-200 rounded-lg px-2">
+            @if (d.taches.length === 0) {
+                <p class="text-center text-gray-400 text-sm py-8">Aucune tâche dans ce dossier.</p>
+            } @else {
+                @for (tache of d.taches; track tache.id) {
+                    <app-tache-item
+                        [tache]="tache"
+                        (changerStatut)="changerStatutTache($event)"
+                        (supprimer)="supprimerTache($event)"
+                    />
+                }
+            }
+        </div>
+    }
+</main>

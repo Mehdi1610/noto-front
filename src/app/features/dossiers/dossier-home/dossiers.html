@@ -1,0 +1,70 @@
+<app-header />
+
+<main class="max-w-3xl mx-auto px-4 sm:px-6 py-6">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Mes dossiers</h1>
+        <button
+            (click)="ouvrirFormulaireRacine()"
+            class="flex items-center gap-1.5 bg-blue-600 text-white px-3 py-2 sm:px-4 rounded-md text-sm font-medium hover:bg-blue-700 active:bg-blue-800 transition-colors"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Nouveau dossier
+        </button>
+    </div>
+
+    @if (formulaireOuvert()) {
+        <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4 shadow-sm">
+            <p class="text-sm text-gray-500 mb-2">
+                {{ parentIdCible() ? 'Créer un sous-dossier' : 'Créer un dossier racine' }}
+            </p>
+            <div class="flex flex-col sm:flex-row gap-2">
+                <input
+                    type="text"
+                    [(ngModel)]="nouveauNom"
+                    placeholder="Nom du dossier"
+                    (keyup.enter)="creerDossier()"
+                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <div class="flex gap-2">
+                    <button
+                        (click)="creerDossier()"
+                        class="flex-1 sm:flex-none bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
+                    >
+                        Créer
+                    </button>
+                    <button
+                        (click)="annulerFormulaire()"
+                        class="flex-1 sm:flex-none bg-gray-100 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200"
+                    >
+                        Annuler
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (erreur()) {
+        <p class="text-red-600 text-sm mb-4">{{ erreur() }}</p>
+    }
+
+    @if (chargement()) {
+        <p class="text-gray-400 text-sm">Chargement...</p>
+    } @else if (arborescence().length === 0) {
+        <div class="text-center py-12 text-gray-400">
+            <p>Aucun dossier pour le moment.</p>
+            <p class="text-sm">Crée ton premier dossier pour commencer.</p>
+        </div>
+    } @else {
+        <div class="bg-white border border-gray-200 rounded-lg p-2 sm:p-4 shadow-sm">
+            @for (dossier of arborescence(); track dossier.id) {
+                <app-dossier-node
+                    [dossier]="dossier"
+                    (supprimer)="supprimerDossier($event)"
+                    (ajouterSousDossier)="ouvrirFormulaireSousDossier($event)"
+                />
+            }
+        </div>
+    }
+</main>

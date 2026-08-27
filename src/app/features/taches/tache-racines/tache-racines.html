@@ -1,0 +1,44 @@
+<app-header />
+
+<main class="max-w-3xl mx-auto px-4 sm:px-6 py-6">
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Tâches rapides</h1>
+        @if (!formulaireOuvert()) {
+            <button
+                (click)="formulaireOuvert.set(true)"
+                class="bg-blue-600 text-white px-3 py-2 sm:px-4 rounded-md text-sm font-medium hover:bg-blue-700"
+            >
+                + Nouvelle tâche
+            </button>
+        }
+    </div>
+
+    @if (formulaireOuvert()) {
+        <div class="mb-4">
+            <app-tache-form
+                (creer)="creerTache($event)"
+                (annuler)="formulaireOuvert.set(false)"
+            />
+        </div>
+    }
+
+    @if (erreur()) {
+        <p class="text-red-600 text-sm mb-3">{{ erreur() }}</p>
+    }
+
+    @if (chargement()) {
+        <p class="text-gray-400 text-sm">Chargement...</p>
+    } @else if (taches().length === 0) {
+        <p class="text-center text-gray-400 text-sm py-12">Aucune tâche rapide pour le moment.</p>
+    } @else {
+        <div class="bg-white border border-gray-200 rounded-lg px-2">
+            @for (tache of taches(); track tache.id) {
+                <app-tache-item
+                    [tache]="tache"
+                    (changerStatut)="changerStatutTache($event)"
+                    (supprimer)="supprimerTache($event)"
+                />
+            }
+        </div>
+    }
+</main>

@@ -1,0 +1,41 @@
+<div class="flex items-start gap-3 py-3 px-2 border-b border-gray-100 last:border-0 group">
+    <button
+        (click)="toggleStatut()"
+        class="mt-0.5 w-5 h-5 flex-shrink-0 rounded-full border-2 flex items-center justify-center transition-colors"
+        [class.border-gray-300]="!estTerminee"
+        [class.bg-green-500]="estTerminee"
+        [class.border-green-500]="estTerminee"
+    >
+        @if (estTerminee) {
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+        }
+    </button>
+
+    <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium text-gray-800" [class.line-through]="estTerminee" [class.text-gray-400]="estTerminee">
+            {{ tache.titre }}
+        </p>
+        @if (tache.description) {
+            <p class="text-xs text-gray-500 mt-0.5 truncate">{{ tache.description }}</p>
+        }
+        <div class="flex items-center gap-2 mt-1">
+            @if (tache.priorite) {
+                <span class="text-xs px-1.5 py-0.5 rounded {{ couleurPriorite() }}">{{ tache.priorite }}</span>
+            }
+            @if (tache.dateEcheance) {
+                <span class="text-xs text-gray-400">📅 {{ tache.dateEcheance }}</span>
+            }
+        </div>
+    </div>
+
+    <button
+        (click)="onSupprimer()"
+        class="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded flex-shrink-0"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
+</div>
