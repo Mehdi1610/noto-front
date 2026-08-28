@@ -17,7 +17,6 @@
         @if (d.description) {
             <p class="text-sm text-gray-500 mb-4">{{ d.description }}</p>
         }
-
         @if (d.sousDossiers.length > 0) {
             <div class="mb-6">
                 <p class="text-xs font-medium text-gray-400 uppercase mb-2">Sous-dossiers</p>
@@ -27,7 +26,9 @@
                             (click)="ouvrirSousDossier(sd.id)"
                             class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-md text-sm text-gray-700"
                         >
-                            📁 {{ sd.nom }}
+                        <div class="flex"> 
+                            <img src="img\folderIcon.svg" class="h-6 mr-2"> {{ sd.nom }}
+                        </div>
                         </button>
                     }
                 </div>

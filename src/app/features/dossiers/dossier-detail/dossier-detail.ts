@@ -19,6 +19,8 @@ export class DossierDetailComponent implements OnInit {
     private dossierService = inject(DossierService);
     private tacheService = inject(TacheService);
 
+
+    
     dossier = signal<DossierTreeResponse | null>(null);
     chargement = signal(true);
     erreur = signal('');
@@ -27,9 +29,15 @@ export class DossierDetailComponent implements OnInit {
     private dossierId!: number;
 
     ngOnInit(): void {
-        this.dossierId = Number(this.route.snapshot.paramMap.get('id'));
-        this.chargerDossier();
+        this.route.paramMap.subscribe(params => {
+            const id = Number(params.get('id'));
+            if (id) {
+                this.dossierId = id;
+                this.chargerDossier();
+            }
+        });
     }
+
 
     chargerDossier(): void {
         this.chargement.set(true);
@@ -72,4 +80,8 @@ export class DossierDetailComponent implements OnInit {
     ouvrirSousDossier(id: number): void {
         this.router.navigate(['/dossiers', id]);
     }
-}
+
+        ouvrirDossierParent(id: number): void {
+        this.router.navigate(['/dossiers', id]);
+    }
+} 
