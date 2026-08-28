@@ -14,7 +14,7 @@
     </button>
 
     <div class="flex-1 min-w-0">
-        <p class="text-sm font-medium text-gray-800" [class.line-through]="estTerminee" [class.text-gray-400]="estTerminee">
+        <p class="text-sm font-medium text-gray-800" [class.line-through]="estTerminee" [class.text-gray-400]="estTerminee" (click)="onModifier()">
             {{ tache.titre }}
         </p>
         @if (tache.description) {
@@ -30,12 +30,24 @@
         </div>
     </div>
 
-    <button
-        (click)="onSupprimer()"
-        class="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded flex-shrink-0"
-    >
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-    </button>
+     <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+        <button
+            (click)="onModifier()"
+            title="Modifier"
+            class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+            </svg>
+        </button>
+        <button
+            (click)="onSupprimer()"
+            title="Supprimer"
+            class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
 </div>

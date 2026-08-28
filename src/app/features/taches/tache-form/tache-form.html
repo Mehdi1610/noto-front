@@ -37,7 +37,7 @@
             [disabled]="form.invalid"
             class="flex-1 sm:flex-none bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
         >
-            Ajouter
+            {{ estEdition ? 'Enregistrer' : 'Ajouter'}}
         </button>
         <button
             type="button"

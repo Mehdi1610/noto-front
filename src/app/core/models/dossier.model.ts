@@ -21,6 +21,8 @@ export interface DossierTreeResponse{
     nom: string;
     description: string | null;
     couleur: string | null;
+    parentId: number | null;
+    parentNom: string | null;
     sousDossiers: DossierTreeResponse[];
     taches: TacheResponse[];
 }

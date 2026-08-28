@@ -6,7 +6,7 @@ import { TacheFormComponent } from '../../taches/tache-form/tache-form';
 import { DossierService } from '../../../core/services/dossierService/dossier-service';
 import { TacheService } from '../../../core/services/tacheService/tache-service';
 import { DossierTreeResponse } from '../../../core/models/dossier.model';
-import { StatutTache, TacheCreateRequest } from '../../../core/models/tache.model';
+import { StatutTache, TacheCreateRequest, TacheUpdateRequest } from '../../../core/models/tache.model';
 
 @Component({
     selector: 'app-dossier-detail',
@@ -25,6 +25,7 @@ export class DossierDetailComponent implements OnInit {
     chargement = signal(true);
     erreur = signal('');
     formulaireOuvert = signal(false);
+    tacheEditionId = signal<number | null>(null);
 
     private dossierId!: number;
 
@@ -63,6 +64,26 @@ export class DossierDetailComponent implements OnInit {
         });
     }
 
+    ouvrirEdition(id: number): void{
+        this.tacheEditionId.set(id);
+    }
+
+    fermerEdition():void{
+        this.tacheEditionId.set(null);
+    }
+
+    modifierTache(id: number, request: TacheUpdateRequest): void{
+        this.tacheService.modifierTache(id, request).subscribe({
+            next: () =>{
+                this.tacheEditionId.set(null);
+                this.chargerDossier();
+            },
+            error: () => this.erreur.set('Erreur lors de la modification')
+        })
+    }
+
+
+
     changerStatutTache(event: { id: number; statut: StatutTache }): void {
         this.tacheService.changerStatut(event.id, event.statut).subscribe({
             next: () => this.chargerDossier(),
@@ -81,7 +102,10 @@ export class DossierDetailComponent implements OnInit {
         this.router.navigate(['/dossiers', id]);
     }
 
-        ouvrirDossierParent(id: number): void {
-        this.router.navigate(['/dossiers', id]);
+    ouvrirDossierParent(): void {
+        const parentId = this.dossier()?.parentId;
+        if(parentId){
+            this.router.navigate(['/dossiers', parentId]);
+        }
     }
 } 

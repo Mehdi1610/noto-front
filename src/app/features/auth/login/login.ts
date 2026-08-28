@@ -29,7 +29,7 @@ export class LoginComponent {
         this.errorMessage = '';
 
         this.authService.login(this.form.getRawValue() as { email: string; password: string }).subscribe({
-            next: () => this.router.navigate(['/dossiers']),
+            next: () => this.router.navigate(['/taches']),
             error: () => {
                 this.errorMessage = 'Email ou mot de passe incorrect';
                 this.loading = false;

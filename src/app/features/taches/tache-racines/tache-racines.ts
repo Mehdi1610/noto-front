@@ -3,7 +3,7 @@ import { HeaderComponent } from '../../../shared/components/header/header';
 import { TacheItemComponent } from '../tache-item/tache-item';
 import { TacheFormComponent } from '../tache-form/tache-form';
 import { TacheService } from '../../../core/services/tacheService/tache-service';
-import { StatutTache, TacheCreateRequest, TacheResponse } from '../../../core/models/tache.model';
+import { StatutTache, TacheCreateRequest, TacheResponse, TacheUpdateRequest } from '../../../core/models/tache.model';
 
 @Component({
     selector: 'app-taches-racines',
@@ -17,6 +17,7 @@ export class TachesRacinesComponent implements OnInit {
     chargement = signal(true);
     erreur = signal('');
     formulaireOuvert = signal(false);
+    tacheEnEditionId = signal<number|null>(null);
 
     ngOnInit(): void {
         this.charger();
@@ -45,6 +46,25 @@ export class TachesRacinesComponent implements OnInit {
             error: () => this.erreur.set('Erreur lors de la création')
         });
     }
+
+    ouvrirEdition(id: number): void{
+        this.tacheEnEditionId.set(id);
+    }
+
+    
+    fermerEdition(): void{
+        this.tacheEnEditionId.set(null);
+    }
+
+     modifierTache(id: number, request: TacheUpdateRequest): void{
+            this.tacheService.modifierTache(id, request).subscribe({
+                next: () =>{
+                    this.tacheEnEditionId.set(null);
+                    this.charger();
+                },
+                error: () => this.erreur.set('Erreur lors de la modification')
+            })
+        }
 
     changerStatutTache(event: { id: number; statut: StatutTache }): void {
         this.tacheService.changerStatut(event.id, event.statut).subscribe({

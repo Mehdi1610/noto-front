@@ -11,12 +11,30 @@
         <p class="text-red-600 text-sm">{{ erreur() }}</p>
     } @else if (dossier(); as d) {
         <div class="flex items-center justify-between mb-2">
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">{{ d.nom }}</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-800 mb-6">{{ d.nom }}</h1>
         </div>
 
         @if (d.description) {
             <p class="text-sm text-gray-500 mb-4">{{ d.description }}</p>
         }
+<div class="mb-6 flex">
+         @if (d.parentId) {
+            <div class="mb-6 mr-10">
+                <p class="text-xs font-medium text-gray-400 uppercase mb-2">Dossier-Parent</p>
+                <div class="flex flex-wrap gap-2">
+                        <button
+                            (click)="ouvrirDossierParent()"
+                            class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-md text-sm text-gray-700"
+                        >
+                        <div class="flex"> 
+                            <img src="img\folderIcon.svg" class="h-6 mr-2"> {{d.parentNom  }}
+                        </div>
+                        </button>
+                </div>
+            </div>
+        }
+
+
         @if (d.sousDossiers.length > 0) {
             <div class="mb-6">
                 <p class="text-xs font-medium text-gray-400 uppercase mb-2">Sous-dossiers</p>
@@ -34,7 +52,7 @@
                 </div>
             </div>
         }
-
+</div>
         <div class="flex items-center justify-between mb-3">
             <p class="text-xs font-medium text-gray-400 uppercase">Tâches</p>
             @if (!formulaireOuvert()) {
@@ -65,11 +83,23 @@
                 <p class="text-center text-gray-400 text-sm py-8">Aucune tâche dans ce dossier.</p>
             } @else {
                 @for (tache of d.taches; track tache.id) {
+                    @if(tacheEditionId() === tache.id){
+                        <div class="py-2">
+                            <app-tache-form
+                                [tacheInitiale]="tache"
+                                (modifier)="modifierTache(tache.id, $event)"
+                                (annuler)="fermerEdition()"    
+                            />
+                        </div>
+                    }
+                    @else{
                     <app-tache-item
                         [tache]="tache"
                         (changerStatut)="changerStatutTache($event)"
                         (supprimer)="supprimerTache($event)"
+                        (modifier)="ouvrirEdition($event)"
                     />
+                    }
                 }
             }
         </div>

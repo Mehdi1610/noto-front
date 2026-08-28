@@ -11,6 +11,7 @@ export class TacheItemComponent {
     @Input({ required: true }) tache!: TacheResponse;
     @Output() changerStatut = new EventEmitter<{ id: number; statut: StatutTache }>();
     @Output() supprimer = new EventEmitter<number>();
+    @Output() modifier = new EventEmitter<number>();
 
     get estTerminee(): boolean {
         return this.tache.statut === 'TERMINEE';
@@ -23,6 +24,10 @@ export class TacheItemComponent {
 
     onSupprimer(): void {
         this.supprimer.emit(this.tache.id);
+    }
+
+    onModifier(): void{
+        this.modifier.emit(this.tache.id);
     }
 
     couleurPriorite(): string {

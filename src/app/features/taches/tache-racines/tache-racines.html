@@ -33,12 +33,24 @@
     } @else {
         <div class="bg-white border border-gray-200 rounded-lg px-2">
             @for (tache of taches(); track tache.id) {
-                <app-tache-item
-                    [tache]="tache"
-                    (changerStatut)="changerStatutTache($event)"
-                    (supprimer)="supprimerTache($event)"
-                />
-            }
+                    @if(tacheEnEditionId() === tache.id){
+                        <div class="py-2">
+                            <app-tache-form
+                                [tacheInitiale]="tache"
+                                (modifier)="modifierTache(tache.id, $event)"
+                                (annuler)="fermerEdition()"    
+                            />
+                        </div>
+                    }
+                    @else{
+                    <app-tache-item
+                        [tache]="tache"
+                        (changerStatut)="changerStatutTache($event)"
+                        (supprimer)="supprimerTache($event)"
+                        (modifier)="ouvrirEdition($event)"
+                    />
+                    }
+                }
         </div>
     }
 </main>
