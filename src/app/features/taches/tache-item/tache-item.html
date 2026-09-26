@@ -1,7 +1,7 @@
-<div class="flex items-start gap-3 py-3 px-2 border-b border-gray-100 last:border-0 group">
+<div class="flex items-start mb-2.5 gap-3 p-3.5 rounded-xl border border-gray-200/80  shadow-sm hover:shadow-md transition-all group border-l-2 {{ couleurPriorite(tache.priorite) }}">
     <button
         (click)="toggleStatut()"
-        class="mt-0.5 w-5 h-5 flex-shrink-0 rounded-full border-2 flex items-center justify-center transition-colors"
+        class="mt-0.5 w-5 h-5 flex-shrink-0 rounded-full border-2 flex items-center justify-center transition-colors cursor-pointer"
         [class.border-gray-300]="!estTerminee"
         [class.bg-green-500]="estTerminee"
         [class.border-green-500]="estTerminee"
@@ -14,27 +14,38 @@
     </button>
 
     <div class="flex-1 min-w-0">
-        <p class="text-sm font-medium text-gray-800" [class.line-through]="estTerminee" [class.text-gray-400]="estTerminee" (click)="onModifier()">
+        <p class="text-sm font-semibold text-gray-800 cursor-pointer" [class.line-through]="estTerminee" [class.text-gray-400]="estTerminee" (click)="onModifier()">
             {{ tache.titre }}
         </p>
         @if (tache.description) {
-            <p class="text-xs text-gray-500 mt-0.5 truncate">{{ tache.description }}</p>
+            <p class="text-xs text-gray-500 mt-1 leading-relaxed">{{ tache.description }}</p>
         }
-        <div class="flex items-center gap-2 mt-1">
-            @if (tache.priorite) {
-                <span class="text-xs px-1.5 py-0.5 rounded {{ couleurPriorite() }}">{{ tache.priorite }}</span>
-            }
-            @if (tache.dateEcheance) {
-                <span class="text-xs text-gray-400">📅 {{ tache.dateEcheance }}</span>
-            }
-        </div>
+        
+        @if ((tache.dossier && displayDossier) || tache.dateEcheance) {
+            <div class="flex items-center gap-2 mt-2">
+                @if (tache.dossier && displayDossier) {
+                    <button
+                        (click)="accederAuDossier()"
+                        title="Dossier"
+                        class="text-xs font-semibold px-2 py-0.5 rounded-md transition-opacity hover:opacity-80 cursor-pointer {{ afficherCouleurDossiers(tache.dossier.couleur) }}"
+                    >
+                        {{ tache.dossier.nom.toUpperCase() }}
+                    </button>
+                }
+                @if (tache.dateEcheance) {
+                    <span class="text-xs text-gray-400 flex items-center gap-1 font-medium">
+                        📅 {{ tache.dateEcheance }}
+                    </span>
+                }
+            </div>
+        }
     </div>
 
-     <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+    <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
         <button
             (click)="onModifier()"
             title="Modifier"
-            class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded"
+            class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors cursor-pointer"
         >
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
@@ -43,7 +54,7 @@
         <button
             (click)="onSupprimer()"
             title="Supprimer"
-            class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded"
+            class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
         >
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />

@@ -26,13 +26,13 @@
         <p class="text-red-600 text-sm mb-3">{{ erreur() }}</p>
     }
 
-    @if (chargement()) {
+    @if (chargementTachesRapides()) {
         <p class="text-gray-400 text-sm">Chargement...</p>
-    } @else if (taches().length === 0) {
+    } @else if (tachesRacinesAffichees().length === 0) {
         <p class="text-center text-gray-400 text-sm py-12">Aucune tâche rapide pour le moment.</p>
     } @else {
-        <div class="bg-white border border-gray-200 rounded-lg px-2">
-            @for (tache of taches(); track tache.id) {
+        <div>
+            @for (tache of tachesRacinesAffichees(); track tache.id) {
                     @if(tacheEnEditionId() === tache.id){
                         <div class="py-2">
                             <app-tache-form
@@ -48,9 +48,24 @@
                         (changerStatut)="changerStatutTache($event)"
                         (supprimer)="supprimerTache($event)"
                         (modifier)="ouvrirEdition($event)"
+                        (rafraichir)="charger()"
                     />
                     }
                 }
         </div>
+    }
+
+        <div class="flex items-center justify-between mb-2">
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Tâches à faire</h1> 
+    </div>
+    @if (chargementTachesAFaire()) {
+        <p class="text-gray-400 text-sm">Chargement...</p>
+    } @else {
+    <app-tache-list
+    [taches]="tachesRestantesAffichees()"
+    [displayDossier]="true"
+    (rafraichir)="charger()"
+    (erreur)="erreur.set($event)"
+    />
     }
 </main>

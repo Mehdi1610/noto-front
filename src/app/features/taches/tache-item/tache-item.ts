@@ -1,5 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { StatutTache, TacheResponse } from '../../../core/models/tache.model';
+import { Router } from '@angular/router';
+import { afficherCouleurDossier } from '../../../shared/constant/couleurDossier';
+import { couleurPriorite } from '../../../shared/constant/couleurPriorite';
 
 @Component({
   selector: 'app-tache-item',
@@ -8,11 +11,15 @@ import { StatutTache, TacheResponse } from '../../../core/models/tache.model';
   styleUrl: './tache-item.css',
 })
 export class TacheItemComponent {
+
     @Input({ required: true }) tache!: TacheResponse;
     @Output() changerStatut = new EventEmitter<{ id: number; statut: StatutTache }>();
     @Output() supprimer = new EventEmitter<number>();
     @Output() modifier = new EventEmitter<number>();
 
+    @Input() displayDossier: boolean = false;
+    private route = inject(Router);
+    
     get estTerminee(): boolean {
         return this.tache.statut === 'TERMINEE';
     }
@@ -30,12 +37,15 @@ export class TacheItemComponent {
         this.modifier.emit(this.tache.id);
     }
 
-    couleurPriorite(): string {
-        switch (this.tache.priorite) {
-            case 'HAUTE': return 'bg-red-100 text-red-700';
-            case 'MOYENNE': return 'bg-yellow-100 text-yellow-700';
-            case 'BASSE': return 'bg-gray-100 text-gray-600';
-            default: return 'hidden';
-        }
+    accederAuDossier() {
+        this.route.navigate(["/dossiers", this.tache.dossier.id]);
+}
+
+    couleurPriorite(priorite: string): string {
+        return couleurPriorite(priorite);
+    }
+
+    afficherCouleurDossiers(couleur: string | null): string{
+        return afficherCouleurDossier(couleur);
     }
 }

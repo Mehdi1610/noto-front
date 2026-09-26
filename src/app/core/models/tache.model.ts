@@ -1,3 +1,5 @@
+import { DossierResponse } from "./dossier.model";
+
 export type Priorite = 'BASSE' | 'MOYENNE' | 'HAUTE';
 export type StatutTache = 'A_FAIRE' | 'EN_COURS' | 'TERMINEE';
 
@@ -8,6 +10,7 @@ export interface TacheResponse {
     statut: StatutTache;
     dateEcheance: string | null;
     priorite: Priorite;
+    dossier: DossierResponse;
 }
 
 export interface TacheCreateRequest {                                                                                                                                                                                                                                                                                                                                                                                                  
