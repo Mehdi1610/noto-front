@@ -29,6 +29,10 @@ export class TacheService {
         return this.http.get<TacheResponse[]>(`${this.baseUrl}/taches/racine`);
     }
 
+    listerTaches(): Observable<TacheResponse[]> {
+        return this.http.get<TacheResponse[]>(`${this.baseUrl}/taches`);
+    }
+
     // --- Opérations directes sur une tâche ---
     obtenirTache(id: number): Observable<TacheResponse> {
         return this.http.get<TacheResponse>(`${this.baseUrl}/taches/${id}`);

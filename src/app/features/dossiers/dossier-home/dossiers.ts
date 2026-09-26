@@ -3,8 +3,8 @@ import { HeaderComponent } from '../../../shared/components/header/header';
 import { DossierNodeComponent } from '../dossier-node/dossier-node';
 import { FormsModule } from '@angular/forms';
 import { DossierService } from '../../../core/services/dossierService/dossier-service';
+import { CHOIX_COULEUR, ChoixCouleurs, afficherCouleurDossier } from '../../../shared/constant/couleurDossier';
 import { DossierTreeResponse } from '../../../core/models/dossier.model';
-
 @Component({
   selector: 'app-dossiers',
   imports: [HeaderComponent, DossierNodeComponent, FormsModule],
@@ -15,6 +15,8 @@ export class DossiersComponent implements OnInit{
 
   private dossierService = inject(DossierService);
 
+    couleur: CHOIX_COULEUR = ChoixCouleurs[9];
+    couleurs: CHOIX_COULEUR[]= ChoixCouleurs;
     arborescence = signal<DossierTreeResponse[]>([]);
     chargement = signal(true);
     erreur = signal('');
@@ -22,6 +24,8 @@ export class DossiersComponent implements OnInit{
     formulaireOuvert = signal(false);
     parentIdCible = signal<number|null>(null);
     nouveauNom = '';
+    nouvelleDescription = '';
+    nouvelleCouleur = signal(ChoixCouleurs[0].valeur);
 
     ngOnInit(): void {
       this.chargerArborescence();
@@ -44,12 +48,15 @@ export class DossiersComponent implements OnInit{
     ouvrirFormulaireRacine(): void{
       this.parentIdCible.set(null);
       this.nouveauNom = '';
+      this.nouvelleCouleur.set(ChoixCouleurs[0].valeur);
       this.formulaireOuvert.set(true);
     }
 
     ouvrirFormulaireSousDossier(parentId:number): void{
       this.parentIdCible.set(parentId);
       this.nouveauNom = '';
+      this.nouvelleDescription = ''
+      this.nouvelleCouleur.set(ChoixCouleurs[0].valeur);
       this.formulaireOuvert.set(true);
     }
 
@@ -57,12 +64,26 @@ export class DossiersComponent implements OnInit{
       this.formulaireOuvert.set(false);
     }
 
+    selectionnerCouleur(couleur: string): void{
+      this.nouvelleCouleur.set(couleur);
+    }
+
+
+    afficherCouleurDossiers(valeur: string): string{
+      return afficherCouleurDossier(valeur);
+    }
+          
+        
+    
+
     creerDossier():void{
       if (!this.nouveauNom.trim()) return;
 
         this.dossierService.creerDossier({
             nom: this.nouveauNom.trim(),
-            parentId: this.parentIdCible()
+            parentId: this.parentIdCible(),
+            description: this.nouvelleDescription,
+            couleur: this.nouvelleCouleur()
         }).subscribe({
             next: () => {
                 this.formulaireOuvert.set(false);
@@ -71,6 +92,10 @@ export class DossiersComponent implements OnInit{
             error: () => this.erreur.set('Erreur lors de la création du dossier')
         });
     }
+
+    onDossierModifie(id: number): void {
+    this.chargerArborescence();
+}
     supprimerDossier(id: number): void {
         if (!confirm('Supprimer ce dossier et tout son contenu (sous-dossiers et tâches) ?')) return;
 
@@ -79,5 +104,6 @@ export class DossiersComponent implements OnInit{
             error: () => this.erreur.set('Erreur lors de la suppression')
         });
     }
+
 }
 
