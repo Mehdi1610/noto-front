@@ -21,7 +21,9 @@ export const ChoixCouleurs: CHOIX_COULEUR[]  = [
 ];
 
 export function afficherCouleurDossier(couleur: string | null): string{
-        switch(couleur) {
+
+
+    switch(couleur) {
     case 'ROUGE': return 'bg-red-600 text-white';
 case 'ORANGE': return 'bg-orange-600 text-white';
 case 'JAUNE': return 'bg-yellow-600 text-white';
@@ -36,6 +38,6 @@ case 'ROSE': return 'bg-pink-600 text-white';
 case 'GRIS': return 'bg-gray-600 text-white';
 case 'MARRON': return 'bg-amber-700 text-white';
 case 'TURQUOISE': return 'bg-teal-600 text-white';
-    default: return 'hidden';
+    default: return 'bg-gray-200 text-white';
 }
     }
