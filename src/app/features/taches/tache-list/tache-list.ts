@@ -73,7 +73,7 @@ export class TacheList {
         });
     }
 
-    prioriteCouleur(priorite: string): string {
+    prioriteCouleur(priorite: string | null): string {
         return couleurPriorite(priorite);
     }
 }

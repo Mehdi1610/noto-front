@@ -1,6 +1,8 @@
 
-export function couleurPriorite(priorite: string): string{
-      
+export function couleurPriorite(priorite: string | null): string{
+
+    if(!priorite) return 'bg-slate-50 border-slate-200 text-slate-800';
+
     switch (priorite.toUpperCase()) {
         case 'HAUTE':
         // Rose / Rouge pastel doux (urgent mais pas agressif)
