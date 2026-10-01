@@ -21,8 +21,7 @@ export const ChoixCouleurs: CHOIX_COULEUR[]  = [
 ];
 
 export function afficherCouleurDossier(couleur: string | null): string{
-
-
+    if(couleur!) return 'bg-gray-200 text-white';
     switch(couleur) {
     case 'ROUGE': return 'bg-red-600 text-white';
 case 'ORANGE': return 'bg-orange-600 text-white';
